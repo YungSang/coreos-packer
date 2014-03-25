@@ -1,0 +1,18 @@
+{
+  "builders" : [{
+    "type"             : "virtualbox-ovf",
+    "source_path"      : "tmp/box.ovf",
+    "vm_name"          : "coreos",
+    "ssh_username"     : "core",
+    "ssh_key_path"     : "tmp/insecure_private_key",
+    "ssh_wait_timeout" : "10s",
+    "shutdown_command" : "sudo -S shutdown -P now"
+  }],
+
+  "post-processors" : [{
+    "type"                 : "vagrant",
+    "include"              : ["tmp/override-plugin.rb"],
+    "vagrantfile_template" : "vagrantfile.tpl",
+    "output"               : "coreos.box"
+  }]
+}
