@@ -1,0 +1,12 @@
+[Unit]
+Description=Docker local
+Documentation=http://docs.docker.io
+Conflicts=getty.target network.target multi-user.target
+
+[Service]
+ExecStartPre=/usr/bin/systemctl kill docker.service
+ExecStartPre=/bin/mount --make-rprivate /
+ExecStart=/usr/bin/docker -d -r=false -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock
+
+[Install]
+WantedBy=local.target

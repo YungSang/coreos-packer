@@ -9,6 +9,17 @@
     "shutdown_command" : "sudo -S shutdown -P now"
   }],
 
+  "provisioners" : [{
+    "type"        : "file",
+    "source"      : "files/",
+    "destination" : "/tmp"
+  }, {
+    "type"   : "shell",
+    "inline" : [
+      "sudo cp /tmp/docker-local.service /media/state/units/"
+    ]
+  }],
+
   "post-processors" : [{
     "type"                 : "vagrant",
     "include"              : ["tmp/override-plugin.rb"],
