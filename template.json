@@ -16,7 +16,8 @@
   }, {
     "type"   : "shell",
     "inline" : [
-      "sudo cp /tmp/docker-local.service /media/state/units/"
+      "sudo cp /tmp/docker-local.service /etc/systemd/system/",
+      "sudo systemctl enable docker-local.service"
     ]
   }],
 
