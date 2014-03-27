@@ -28,7 +28,7 @@ tmp/override-plugin.rb:
 #	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
 
 clean:
-	rm -r boot2coreos.box
+	rm -r coreos.box
 	rm -rf tmp/
 	rm -rf output-*/
 
