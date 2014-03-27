@@ -24,7 +24,8 @@ tmp/insecure_private_key:
 tmp/override-plugin.rb:
 	mkdir -p tmp
 	cd tmp; \
-	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
+	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/eb7318d257316b46259905905a725537eca54986/override-plugin.rb
+#	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
 
 clean:
 	rm -r boot2coreos.box
