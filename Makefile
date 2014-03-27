@@ -14,7 +14,7 @@ tmp/coreos_production_vagrant_image.vmdk: tmp/coreos_production_vagrant.box
 tmp/coreos_production_vagrant.box:
 	mkdir -p tmp
 	cd tmp; \
-	curl -LO http://storage.core-os.net/coreos/amd64-generic/dev-channel/coreos_production_vagrant.box
+	curl -LO http://storage.core-os.net/coreos/amd64-usr/alpha/coreos_production_vagrant.box
 
 tmp/insecure_private_key:
 	mkdir -p tmp
@@ -24,8 +24,7 @@ tmp/insecure_private_key:
 tmp/override-plugin.rb:
 	mkdir -p tmp
 	cd tmp; \
-	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/eb7318d257316b46259905905a725537eca54986/override-plugin.rb
-#	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
+	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
 
 clean:
 	rm -r coreos.box
