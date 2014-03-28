@@ -1,4 +1,4 @@
-boot2coreos.box: template.json vagrantfile.tpl files/docker-local.service \
+boot2coreos.box: template.json vagrantfile.tpl files/docker-tcp.socket \
 	tmp/box.ovf tmp/coreos_production_vagrant_image.vmdk tmp/insecure_private_key \
 	tmp/override-plugin.rb
 	packer build template.json
