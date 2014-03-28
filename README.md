@@ -2,10 +2,16 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on https://github.com/coreos/coreos-vagrant
-- Add [override-plugin.rb](https://github.com/coreos/coreos-vagrant/blob/master/override-plugin.rb)
-- Setup and enable Docker Daemon with `-H tcp://0.0.0.0:4243`
+- Based on CoreOS 268.1.0
+- Enable the Docker daemon
 - Support Docker provisioner
+- Add override-plugin.rb  
+Cf.) https://github.com/coreos/coreos-vagrant/blob/master/override-plugin.rb
+- *Use btrfs for Docker as well*  
+"One unfortunate side effect of this change is that all Docker containers will need to be reinitialized on CoreOS (docker pull, or docker build). "  
+Cf.) http://coreos.com/blog/new-filesystem-btrfs-cloud-config/  
+- *Use docker-tcp.socket to expose the port 4243*  
+Cf.) http://coreos.com/docs/launching-containers/building/customizing-docker/#enable-the-remote-api-on-a-new-socket
 
 ## How to Build
 
@@ -45,3 +51,10 @@ $ docker version
 $ docker images -t
 $ docker ps -a
 ```
+
+## License
+
+[![CC0](http://i.creativecommons.org/p/zero/1.0/88x31.png)](http://creativecommons.org/publicdomain/zero/1.0/)  
+To the extent possible under law, the person who associated CC0 with this work has waived all copyright and related or neighboring rights to this work.
+
+- [CoreOS](https://coreos.com/) is under the [Apache 2.0 license](http://www.apache.org/licenses/LICENSE-2.0)?
