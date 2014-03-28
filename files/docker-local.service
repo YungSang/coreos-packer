@@ -5,7 +5,7 @@ Documentation=http://docs.docker.io
 [Service]
 ExecStartPre=/usr/bin/systemctl kill docker.service
 ExecStartPre=/bin/mount --make-rprivate /
-ExecStart=/usr/bin/docker -d -r=false -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock
+ExecStart=/usr/bin/docker -d -s=btrfs -r=false -H tcp://0.0.0.0:4243 -H unix:///var/run/docker.sock
 
 [Install]
 WantedBy=multi-user.target
