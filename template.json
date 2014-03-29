@@ -18,7 +18,10 @@
     "inline" : [
       "sudo cp /tmp/docker-tcp.socket /etc/systemd/system/",
       "sudo systemctl enable docker-tcp.socket",
-      "sudo systemctl enable docker.service"
+      "sudo systemctl enable docker.service",
+      "sudo chmod o+w /etc/machine-id",
+      "sudo echo '42000000000000000000000000000042' > /etc/machine-id",
+      "sudo chmod o-w /etc/machine-id"
     ]
   }],
 
