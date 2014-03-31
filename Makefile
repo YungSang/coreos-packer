@@ -1,6 +1,6 @@
-boot2coreos.box: template.json vagrantfile.tpl files/docker-tcp.socket \
-	tmp/box.ovf tmp/coreos_production_vagrant_image.vmdk tmp/insecure_private_key \
-	tmp/override-plugin.rb
+boot2coreos.box: template.json vagrantfile.tpl \
+ 	files/docker-tcp.socket files/override-plugin.rb \
+	tmp/box.ovf tmp/coreos_production_vagrant_image.vmdk tmp/insecure_private_key
 	packer build template.json
 
 tmp/box.ovf: tmp/coreos_production_vagrant.box
@@ -18,13 +18,7 @@ tmp/coreos_production_vagrant.box:
 
 tmp/insecure_private_key:
 	mkdir -p tmp
-	cd tmp; \
-	curl -L https://raw.githubusercontent.com/mitchellh/vagrant/master/keys/vagrant -o insecure_private_key
-
-tmp/override-plugin.rb:
-	mkdir -p tmp
-	cd tmp; \
-	curl -LO https://raw.githubusercontent.com/coreos/coreos-vagrant/master/override-plugin.rb
+	curl -L https://raw.github.com/mitchellh/vagrant/master/keys/vagrant -o tmp/insecure_private_key
 
 clean:
 	rm -f coreos.box
