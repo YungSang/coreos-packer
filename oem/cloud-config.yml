@@ -1,0 +1,50 @@
+#cloud-config
+
+coreos:
+  oem:
+    id: vagrant
+    name: CoreOS.box for Vagrant
+    version-id: 0.4.1
+    home-url: https://vagrantcloud.com/yungsang/coreos
+    bug-report-url: https://github.com/YungSang/coreos-packer
+
+  units:
+    - name: coreos-cloudinit-vagrant.path
+      command: start
+      runtime: no
+      content: |
+        [Path]
+        PathExists=/var/lib/coreos-vagrant/user-data
+
+        [Install]
+        WantedBy=multi-user.target
+
+    - name: coreos-cloudinit-vagrant.service
+      runtime: no
+      content: |
+        [Unit]
+        ConditionFileNotEmpty=/var/lib/coreos-vagrant/user-data
+
+        [Service]
+        Type=oneshot
+        EnvironmentFile=-/etc/environment
+        ExecStart=/usr/bin/coreos-cloudinit --from-file /var/lib/coreos-vagrant/user-data
+        RemainAfterExit=yes
+
+    - name: docker-tcp.socket
+      command: start
+      runtime: no
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=4243
+        Service=docker.service
+        BindIPv6Only=both
+
+        [Install]
+        WantedBy=sockets.target
+
+    - name: docker.service
+      command: start
