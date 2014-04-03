@@ -2,7 +2,7 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS 268.1.0
+- Based on CoreOS 273.0.0
 - Enable the Docker daemon
 - Support Docker provisioner
 - Add override-plugin.rb  
@@ -12,6 +12,7 @@ Cf.) https://github.com/coreos/coreos-vagrant/blob/master/override-plugin.rb
 Cf.) http://coreos.com/blog/new-filesystem-btrfs-cloud-config/  
 - *Use docker-tcp.socket to expose the port 4243*  
 Cf.) http://coreos.com/docs/launching-containers/building/customizing-docker/#enable-the-remote-api-on-a-new-socket
+- *Override cloud-config.yml to setup Docker and /etc/oem-release*
 
 ## How to Build
 
