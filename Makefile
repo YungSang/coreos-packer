@@ -1,4 +1,4 @@
-boot2coreos.box: template.json vagrantfile.tpl \
+coreos.box: template.json vagrantfile.tpl \
  	oem/cloud-config.yml oem/override-plugin.rb \
 	tmp/box.ovf tmp/coreos_production_vagrant_image.vmdk tmp/insecure_private_key
 	packer build template.json
