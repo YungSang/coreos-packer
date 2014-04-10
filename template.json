@@ -17,7 +17,7 @@
     "type"   : "shell",
     "inline" : [
       "sudo cp /tmp/cloud-config.yml /usr/share/oem/",
-      "sudo systemctl restart coreos-cloudinit-oem.service",
+      "sudo rm /var/lib/docker/repositories-btrfs",
       "sudo sh -c 'echo 42000000000000000000000000000042 > /etc/machine-id'"
     ]
   }],
