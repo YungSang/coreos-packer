@@ -2,7 +2,7 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS 273.0.0
+- Based on CoreOS 282.0.0
 - Enable the Docker daemon
 - Support Docker provisioner
 - Add override-plugin.rb  
@@ -33,10 +33,14 @@ Or
 ```
 VAGRANTFILE_API_VERSION = "2"
 
+Vagrant.require_version ">= 1.5.0"
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "yungsang/coreos"
 
   config.vm.network "forwarded_port", guest: 4243, host: 4243
+
+  config.vm.network "private_network", ip: "192.168.33.10"
 
   config.vm.provision :docker do |d|
     d.pull_images "busybox"
