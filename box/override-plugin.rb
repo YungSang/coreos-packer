@@ -105,10 +105,32 @@ EOF
           end
         end
       end
+    end
+  end
+end
 
+require Vagrant.source_root.join("plugins/guests/coreos/cap/change_host_name.rb")
+
+module VagrantPlugins
+  module GuestCoreOS
+    module Cap
       class ChangeHostName
         def self.change_host_name(machine, name)
           # This is handled in configure_networks
+        end
+      end
+    end
+  end
+end
+
+require Vagrant.source_root.join("plugins/guests/coreos/cap/docker.rb")
+
+module VagrantPlugins
+  module GuestCoreOS
+    module Cap
+      module Docker
+        def self.docker_daemon_running(machine)
+          machine.communicate.test("test -S /run/docker.sock")
         end
       end
     end
