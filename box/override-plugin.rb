@@ -123,14 +123,17 @@ module VagrantPlugins
   end
 end
 
-require Vagrant.source_root.join("plugins/guests/coreos/cap/docker.rb")
+cap_docker = Vagrant.source_root.join("plugins/guests/coreos/cap/docker.rb")
+if File.exist?(cap_docker)
+  require cap_docker
 
-module VagrantPlugins
-  module GuestCoreOS
-    module Cap
-      module Docker
-        def self.docker_daemon_running(machine)
-          machine.communicate.test("test -S /run/docker.sock")
+  module VagrantPlugins
+    module GuestCoreOS
+      module Cap
+        module Docker
+          def self.docker_daemon_running(machine)
+            machine.communicate.test("test -S /run/docker.sock")
+          end
         end
       end
     end
