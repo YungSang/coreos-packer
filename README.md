@@ -2,7 +2,7 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS 282.0.0
+- Based on CoreOS 286.0.0
 - Enable the Docker daemon
 - Support Docker provisioner
 - Add override-plugin.rb  
