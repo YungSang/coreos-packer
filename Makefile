@@ -40,7 +40,7 @@ test: coreos.box
 	echo "-----> /etc/machine-id"; \
 	vagrant ssh -c "cat /etc/machine-id"; \
 	echo "-----> systemctl list-units"; \
-	vagrant ssh -c "systemctl list-units"; \
+	vagrant ssh -c "systemctl list-units --no-pager"; \
 	vagrant suspend
 
 clean:
