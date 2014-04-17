@@ -12,10 +12,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/vagrant"
 
   config.vm.provider :virtualbox do |vb|
+    vb.name = "#{ENV['VM_NAME']}"
     vb.cpus = 1
     vb.memory = 1024
-
-    vb.customize ["modifyvm", :id, "--name", "#{ENV['VM_NAME']}"]
 
     # Create and attach a target HDD
     vb.customize [
