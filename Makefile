@@ -1,8 +1,12 @@
 VM_NAME  := CoreOS Packer
 BOX_NAME := CoreOS Box
 
+box: coreos.box
+
+disk: tmp/CoreOS.vmdk
+
 coreos.box: tmp/CoreOS.vmdk
-	vagrant halt
+	vagrant halt -f
 	#
 	# Clone
 	#
@@ -28,6 +32,7 @@ tmp/CoreOS.vmdk: tmp/coreos-install oem/cloud-config.yml box/override-plugin.rb 
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
 	vagrant provision
+	vagrant suspend
 
 tmp/coreos-install:
 	mkdir -p tmp
