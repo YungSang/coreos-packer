@@ -60,6 +60,7 @@ test: coreos.box
 clean:
 	vagrant destroy -f
 	-VBoxManage unregistervm "${BOX_NAME}" --delete
+	cd test; vagrant destroy -f
 	rm -f coreos.box
 	rm -rf tmp/
 
