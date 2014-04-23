@@ -7,7 +7,11 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.require_version ">= 1.5.0"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.vm.box = "coreos"
+  if ENV['BOX_NAME']
+    config.vm.box = "#{ENV['BOX_NAME']}"
+  else
+    config.vm.box = "yungsang/coreos"
+  end
 
   config.vm.network "forwarded_port", guest: 4243, host: 4243
 

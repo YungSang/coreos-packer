@@ -44,7 +44,7 @@ test: coreos.box
 	vagrant box add coreos coreos.box
 	cd test; \
 	vagrant destroy -f; \
-	vagrant up; \
+	BOX_NAME="coreos" vagrant up; \
 	echo "-----> docker version"; \
 	docker version; \
 	echo "-----> /etc/os-release"; \
