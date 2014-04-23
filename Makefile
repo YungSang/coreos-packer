@@ -1,24 +1,33 @@
-VM_NAME := CoreOS Packer
+VM_NAME  := CoreOS Packer
+BOX_NAME := CoreOS Box
 
-coreos.box: tmp/coreos-install oem/cloud-config.yml box/override-plugin.rb box/vagrantfile.tpl
-	VM_NAME="${VM_NAME}" vagrant up --no-provision
-	vagrant provision
+coreos.box: tmp/CoreOS.vmdk
 	vagrant halt
+	#
+	# Clone
+	#
+	-VBoxManage unregistervm "${BOX_NAME}" --delete
+	VBoxManage clonevm "${VM_NAME}" --name "${BOX_NAME}" --register
 	#
 	# Clean up
 	#
-	VBoxManage storageattach "${VM_NAME}" --storagectl "IDE Controller" --port 0 --device 0 --medium none
-	VBoxManage storageattach "${VM_NAME}" --storagectl "IDE Controller" --port 1 --device 0 --medium none
-	VBoxManage storageattach "${VM_NAME}" --storagectl "SATA Controller" --port 1 --device 0 --medium none
-	VBoxManage storageattach "${VM_NAME}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium tmp/CoreOS.vmdk
-	VBoxManage closemedium disk "${HOME}/VirtualBox VMs/${VM_NAME}/box-disk1.vmdk" --delete
-	VBoxManage modifyvm "${VM_NAME}" --ostype Linux26_64
+	VBoxManage storageattach "${BOX_NAME}" --storagectl "IDE Controller" --port 0 --device 0 --medium none
+	VBoxManage storageattach "${BOX_NAME}" --storagectl "IDE Controller" --port 1 --device 0 --medium none
+	VBoxManage storageattach "${BOX_NAME}" --storagectl "SATA Controller" --port 1 --device 0 --medium none
+	VBoxManage storageattach "${BOX_NAME}" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium "${HOME}/VirtualBox VMs/${BOX_NAME}/${BOX_NAME}-disk2.vmdk"
+	VBoxManage closemedium disk "${HOME}/VirtualBox VMs/${BOX_NAME}/${BOX_NAME}-disk1.vmdk" --delete
+	VBoxManage modifyvm "${BOX_NAME}" --ostype Linux26_64
 	#
 	# Package
 	#
 	rm -f coreos.box
 	cd box; \
-	vagrant package --base "${VM_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
+	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
+
+tmp/CoreOS.vmdk: tmp/coreos-install oem/cloud-config.yml box/override-plugin.rb box/vagrantfile.tpl
+	vagrant destroy -f
+	VM_NAME="${VM_NAME}" vagrant up --no-provision
+	vagrant provision
 
 tmp/coreos-install:
 	mkdir -p tmp
@@ -45,6 +54,7 @@ test: coreos.box
 
 clean:
 	vagrant destroy -f
+	-VBoxManage unregistervm "${BOX_NAME}" --delete
 	rm -f coreos.box
 	rm -rf tmp/
 
