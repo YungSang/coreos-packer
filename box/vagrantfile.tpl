@@ -15,4 +15,9 @@ Vagrant.configure("2") do |config|
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
     vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
   end
+
+  config.vm.provider :parallels do |prl|
+    # Guest Tools are unavailable.
+    prl.check_guest_tools = false
+ end
 end
