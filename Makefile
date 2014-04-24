@@ -5,7 +5,7 @@ box: coreos.box
 
 disk: tmp/CoreOS.vmdk
 
-coreos.box: tmp/CoreOS.vmdk
+coreos.box: tmp/CoreOS.vmdk box/override-plugin.rb box/vagrantfile.tpl
 	vagrant halt -f
 	#
 	# Clone
@@ -28,7 +28,7 @@ coreos.box: tmp/CoreOS.vmdk
 	cd box; \
 	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
 
-tmp/CoreOS.vmdk: tmp/coreos-install oem/cloud-config.yml box/override-plugin.rb box/vagrantfile.tpl
+tmp/CoreOS.vmdk: tmp/coreos-install oem/cloud-config.yml
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
 	vagrant provision
