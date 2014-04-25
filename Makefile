@@ -55,6 +55,10 @@ test: coreos.box
 	vagrant ssh -c "cat /etc/machine-id"; \
 	echo "-----> systemctl list-units"; \
 	vagrant ssh -c "systemctl list-units --no-pager"; \
+	echo "-----> df"; \
+	vagrant ssh -c "df"; \
+	echo "-----> /etc/environment"; \
+	vagrant ssh -c "cat /etc/environment"; \
 	vagrant suspend
 
 clean:
