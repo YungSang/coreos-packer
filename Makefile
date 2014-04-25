@@ -43,19 +43,19 @@ test: coreos.box
 	vagrant box remove coreos --provider virtualbox
 	vagrant box add coreos coreos.box
 	cd test; \
-	vagrant destroy -f; \
+	BOX_NAME="coreos" vagrant destroy -f; \
 	BOX_NAME="coreos" vagrant up; \
 	echo "-----> docker version"; \
 	docker version; \
 	echo "-----> /etc/os-release"; \
-	vagrant ssh -c "cat /etc/os-release"; \
+	BOX_NAME="coreos" vagrant ssh -c "cat /etc/os-release"; \
 	echo "-----> /etc/oem-release"; \
-	vagrant ssh -c "cat /etc/oem-release"; \
+	BOX_NAME="coreos" vagrant ssh -c "cat /etc/oem-release"; \
 	echo "-----> /etc/machine-id"; \
-	vagrant ssh -c "cat /etc/machine-id"; \
+	BOX_NAME="coreos" vagrant ssh -c "cat /etc/machine-id"; \
 	echo "-----> systemctl list-units"; \
-	vagrant ssh -c "systemctl list-units --no-pager"; \
-	vagrant suspend
+	BOX_NAME="coreos" vagrant ssh -c "systemctl list-units --no-pager"; \
+	BOX_NAME="coreos" vagrant suspend
 
 clean:
 	vagrant destroy -f
