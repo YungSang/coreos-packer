@@ -12,6 +12,22 @@ coreos:
     bug-report-url: https://github.com/YungSang/coreos-packer
 
   units:
+    - name: resize-btrfs.service
+      command: start
+
+    - name: oem-resize-btrfs.service
+      command: start
+      content: |
+        [Unit]
+        Description=Resize Btrfs Filesystems
+        ConditionVirtualization=!container
+
+        [Service]
+        Type=oneshot
+        RemainAfterExit=no
+        ExecStart=/usr/share/oem/bin/resize_btrfs
+        StandardOutput=journal+console
+
     - name: coreos-cloudinit-vagrant.path
       command: start
       runtime: no
