@@ -40,7 +40,7 @@ tmp/coreos-install:
 	chmod +x tmp/coreos-install
 
 test: coreos.box
-	vagrant box remove coreos
+	vagrant box remove coreos --provider virtualbox
 	vagrant box add coreos coreos.box
 	cd test; \
 	vagrant destroy -f; \
