@@ -51,7 +51,7 @@ coreos-parallels.box: tmp/CoreOS.vmdk parallels/metadata.json parallels/override
 	-prlctl unregister "${VM_NAME}"
 	rm -rf "${HOME}/Documents/Parallels/${VM_NAME}.pvm"
 	prlctl create "${VM_NAME}" --ostype linux --distribution linux-2.6 --no-hdd
-	mv  "${HOME}/Documents/Parallels/CoreOS.hdd" "${HOME}/Documents/Parallels/${VM_NAME}.pvm/"
+	mv "${HOME}/Documents/Parallels/CoreOS.hdd" "${HOME}/Documents/Parallels/${VM_NAME}.pvm/"
 	prlctl set "${VM_NAME}" --device-add hdd --image "${HOME}/Documents/Parallels/${VM_NAME}.pvm/CoreOS.hdd"
 	prlctl set "${VM_NAME}" --device-bootorder "hdd0 cdrom0"
 	#
@@ -114,7 +114,7 @@ test: coreos.box
 
 ptest: coreos-parallels.box
 	vagrant box remove coreos --provider parallels
-	vagrant box add coreos coreos-parallels.box  --provider parallels
+	vagrant box add coreos coreos-parallels.box --provider parallels
 	cd test; \
 	BOX_NAME="coreos" vagrant destroy -f; \
 	BOX_NAME="coreos" vagrant up --provider parallels; \
