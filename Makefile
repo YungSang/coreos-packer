@@ -30,7 +30,7 @@ coreos.box: tmp/CoreOS.vmdk box/override-plugin.rb box/vagrantfile.tpl
 	cd box; \
 	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
 
-tmp/CoreOS.vmdk: tmp/coreos-install oem/cloud-config.yml
+tmp/CoreOS.vmdk: tmp/coreos-install tmp/coreos-setup-environment oem/cloud-config.yml
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
 	vagrant provision
@@ -88,6 +88,11 @@ tmp/coreos-install:
 	mkdir -p tmp
 	curl -L https://raw.github.com/coreos/init/master/bin/coreos-install -o tmp/coreos-install
 	chmod +x tmp/coreos-install
+
+tmp/coreos-setup-environment:
+	mkdir -p tmp
+	curl -L https://raw.github.com/coreos/coreos-overlay/master/coreos-base/oem-vagrant/files/coreos-setup-environment -o tmp/coreos-setup-environment
+	chmod +x tmp/coreos-setup-environment
 
 test: coreos.box
 	vagrant box remove coreos --provider virtualbox
