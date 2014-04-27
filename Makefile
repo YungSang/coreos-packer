@@ -95,7 +95,7 @@ tmp/coreos-setup-environment:
 	chmod +x tmp/coreos-setup-environment
 
 test: coreos.box
-	vagrant box remove coreos --provider virtualbox
+	-vagrant box remove coreos --provider virtualbox
 	vagrant box add coreos coreos.box
 	cd test; \
 	BOX_NAME="coreos" vagrant destroy -f; \
@@ -113,7 +113,7 @@ test: coreos.box
 	BOX_NAME="coreos" vagrant suspend
 
 ptest: coreos-parallels.box
-	vagrant box remove coreos --provider parallels
+	-vagrant box remove coreos --provider parallels
 	vagrant box add coreos coreos-parallels.box --provider parallels
 	cd test; \
 	BOX_NAME="coreos" vagrant destroy -f; \
