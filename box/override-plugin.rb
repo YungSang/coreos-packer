@@ -44,17 +44,6 @@ NETWORK_UNIT = <<EOF
           Address=%s
 EOF
 
-NETWORK_DHCP_UNIT = <<EOF
-      - name: %s
-        runtime: no
-        content: |
-          [Match]
-          Name=%s
-
-          [Network]
-          DHCP=%s
-EOF
-
 # Borrowed from http://stackoverflow.com/questions/1825928/netmask-to-cidr-in-ruby
 IPAddr.class_eval do
   def to_cidr
@@ -87,10 +76,6 @@ module VagrantPlugins
               unit_name = "50-%s.network" % [iface_name]
 
               unit = ""
-
-              if iface_type == :dhcp
-                unit = NETWORK_DHCP_UNIT % [unit_name, iface_name, 'yes']
-              end
 
               if iface_type == :static
                 cidr = IPAddr.new(network[:netmask]).to_cidr
