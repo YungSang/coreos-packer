@@ -7,13 +7,19 @@ if [ -z "$ENV" ]; then
     exit 1
 fi
 
+# just wait for interfaces to be ready
 ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
+while [ -z "$ifaces" ]; do
+    sleep 0.1
+    ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
+done
+
 ifaces=($ifaces)
 if [ -z "${ifaces[1]}" ]; then
     exit 0
 fi
 
-# just block until interface is ready
+# just block until the second interface is ready
 ipaddr=`ifconfig ${ifaces[1]} | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
 while [ -z "$ipaddr" ]; do
     sleep 0.1
