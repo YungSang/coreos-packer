@@ -42,6 +42,7 @@ NETWORK_UNIT = <<EOF
 
           [Network]
           Address=%s
+          DHCP=%s
 EOF
 
 # Borrowed from http://stackoverflow.com/questions/1825928/netmask-to-cidr-in-ruby
@@ -67,30 +68,31 @@ module VagrantPlugins
               interfaces = result.split("\n")
             end
 
-            ip = ""
-
             # Configure interfaces
             # FIXME: fix matching of interfaces with IP adresses
             networks.each do |network|
+              iface_type = network[:type]
               iface_num = network[:interface].to_i
               iface_name = interfaces[iface_num]
-              cidr = IPAddr.new('255.255.255.0').to_cidr
-              address = "%s/%s" % [network[:ip], cidr]
               unit_name = "50-%s.network" % [iface_name]
-              unit = NETWORK_UNIT % [unit_name, iface_name, address]
+
+              unit = ""
+
+              if iface_type == :dhcp
+                unit = NETWORK_UNIT % [unit_name, iface_name, '', 'yes']
+              end
+
+              if iface_type == :static
+                cidr = IPAddr.new(network[:netmask]).to_cidr
+                address = "%s/%s" % [network[:ip], cidr]
+                unit = NETWORK_UNIT % [unit_name, iface_name, address, 'no']
+              end
 
               cfg = "#{cfg}#{unit}"
-              ip = network[:ip]
             end
 
             cfg = <<EOF
 #{cfg}
-write_files:
-  - path: /etc/environment
-    content: |
-      COREOS_PUBLIC_IPV4=#{ip}
-      COREOS_PRIVATE_IPV4=#{ip}
-
 hostname: #{machine.name}
 EOF
 

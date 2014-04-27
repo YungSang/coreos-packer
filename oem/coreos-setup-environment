@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+ENV="$1"
+
+if [ -z "$ENV" ]; then
+    echo usage: $0 /etc/environment
+    exit 1
+fi
+
+ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
+ifaces=($ifaces)
+if [ -z "${ifaces[1]}" ]; then
+    exit 0
+fi
+
+# just block until interface is ready
+ipaddr=`ifconfig ${ifaces[1]} | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
+while [ -z "$ipaddr" ]; do
+    sleep 0.1
+    ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
+    ifaces=($ifaces)
+    ipaddr=`ifconfig ${ifaces[1]} | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
+done
+
+echo "COREOS_PUBLIC_IPV4=${ipaddr}" >> $ENV
+echo "COREOS_PRIVATE_IPV4=${ipaddr}" >> $ENV
