@@ -42,6 +42,16 @@ NETWORK_UNIT = <<EOF
 
           [Network]
           Address=%s
+EOF
+
+NETWORK_DHCP_UNIT = <<EOF
+      - name: %s
+        runtime: no
+        content: |
+          [Match]
+          Name=%s
+
+          [Network]
           DHCP=%s
 EOF
 
@@ -79,13 +89,13 @@ module VagrantPlugins
               unit = ""
 
               if iface_type == :dhcp
-                unit = NETWORK_UNIT % [unit_name, iface_name, '', 'yes']
+                unit = NETWORK_DHCP_UNIT % [unit_name, iface_name, 'yes']
               end
 
               if iface_type == :static
                 cidr = IPAddr.new(network[:netmask]).to_cidr
                 address = "%s/%s" % [network[:ip], cidr]
-                unit = NETWORK_UNIT % [unit_name, iface_name, address, 'no']
+                unit = NETWORK_UNIT % [unit_name, iface_name, address]
               end
 
               cfg = "#{cfg}#{unit}"
