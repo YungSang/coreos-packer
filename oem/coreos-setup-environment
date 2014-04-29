@@ -19,6 +19,7 @@ function get_interfaces {
         if [ -n "$ifaces" ]; then
             break
         fi
+        sleep 0.1
     done
     echo $ifaces
 }
@@ -30,6 +31,7 @@ function get_ipv4 {
         if [ -n "$ipv4" ]; then
             break
         fi
+        sleep 0.1
     done
     echo $ipv4
 }
