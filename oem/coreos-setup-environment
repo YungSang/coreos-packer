@@ -10,7 +10,7 @@ fi
 function get_interfaces {
     # just wait for interfaces to be ready
     while :; do
-        ifaces=`ifconfig | grep ^enp0 | cut -f1 -d: | tr "\n" " "`
+        ifaces=$(ifconfig | grep ^enp0 | cut -f1 -d: | tr "\n" " ")
         if [ -n "$ifaces" ]; then
             break
         fi
@@ -21,7 +21,7 @@ function get_interfaces {
 function get_ipv4 {
     # just wait for the interface to be ready
     while :; do
-        ipv4=`ifconfig $1 | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
+        ipv4=$(ifconfig $1 | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' ')
         if [ -n "$ipv4" ]; then
             break
         fi
