@@ -59,6 +59,8 @@ module VagrantPlugins
           @@logger.debug("Networks: #{networks.inspect}")
           @@logger.debug("Interfaces: #{match_rules.inspect}")
 
+          proceed = false
+
           # Generate any static networks, let DHCP handle the rest
           networks.each do |network|
             next if network[:type].to_sym != :static
@@ -74,18 +76,21 @@ module VagrantPlugins
             cidr = IPAddr.new(network[:netmask]).to_cidr
             address = "%s/%s" % [network[:ip], cidr]
             cfg << NETWORK_UNIT % [unit_name, match, address]
+            proceed = true
           end
 
-          machine.communicate.tap do |comm|
-            temp = Tempfile.new("coreos-vagrant")
-            temp.binmode
-            temp.write(cfg)
-            temp.close
+          if proceed
+            machine.communicate.tap do |comm|
+              temp = Tempfile.new("coreos-vagrant")
+              temp.binmode
+              temp.write(cfg)
+              temp.close
 
-            path = "/var/tmp/networks.yml"
-            path_esc = path.gsub("/", "-")
-            comm.upload(temp.path, path)
-            comm.sudo("systemctl start system-cloudinit@#{path_esc}.service")
+              path = "/var/tmp/networks.yml"
+              path_esc = path.gsub("/", "-")
+              comm.upload(temp.path, path)
+              comm.sudo("systemctl start system-cloudinit@#{path_esc}.service")
+            end
           end
         end
 
