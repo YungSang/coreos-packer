@@ -13,11 +13,6 @@ require Vagrant.source_root.join("plugins/guests/coreos/cap/configure_networks.r
 BASE_CLOUD_CONFIG = <<EOF
 #cloud-config
 
-write_files:
-  - path: /etc/environment
-    content: |
-      COREOS_PUBLIC_IPV4=%s
-      COREOS_PRIVATE_IPV4=%s
 coreos:
     units:
 EOF
@@ -47,8 +42,9 @@ module VagrantPlugins
         @@logger = Log4r::Logger.new("vagrant::guest::coreos::configure_networks")
 
         def self.configure_networks(machine, networks)
-          public_ipv4, private_ipv4 = get_environment_ips(machine, "127.0.0.1")
-          cfg = BASE_CLOUD_CONFIG % [public_ipv4, private_ipv4]
+#          public_ipv4, private_ipv4 = get_environment_ips(machine, "127.0.0.1")
+#          cfg = BASE_CLOUD_CONFIG % [public_ipv4, private_ipv4]
+          cfg = BASE_CLOUD_CONFIG
 
           # Define network units by mac address if possible.
           match_rules = {}
