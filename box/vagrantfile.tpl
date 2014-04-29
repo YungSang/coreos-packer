@@ -1,4 +1,12 @@
-require_relative "override-plugin.rb"
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+if Vagrant::VERSION < "1.5.4"
+  raise "Need at least Vagrant version 1.5.4, please update"
+end
+
+require_relative "change_host_name.rb"
+require_relative "configure_networks.rb"
 
 Vagrant.configure("2") do |config|
   # SSH in as the default 'core' user, it has the vagrant ssh key.

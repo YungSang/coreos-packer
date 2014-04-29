@@ -7,7 +7,7 @@ box: coreos.box
 
 disk: tmp/CoreOS.vmdk
 
-coreos.box: tmp/CoreOS.vmdk box/override-plugin.rb box/vagrantfile.tpl
+coreos.box: tmp/CoreOS.vmdk box/change_host_name.rb box/configure_networks.rb box/vagrantfile.tpl
 	vagrant halt -f
 	#
 	# Clone
@@ -28,7 +28,7 @@ coreos.box: tmp/CoreOS.vmdk box/override-plugin.rb box/vagrantfile.tpl
 	#
 	rm -f coreos.box
 	cd box; \
-	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
+	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include change_host_name.rb,configure_networks.rb --vagrantfile vagrantfile.tpl
 
 tmp/CoreOS.vmdk: tmp/coreos-install oem/coreos-setup-environment oem/cloud-config.yml
 	vagrant destroy -f
@@ -38,7 +38,7 @@ tmp/CoreOS.vmdk: tmp/coreos-install oem/coreos-setup-environment oem/cloud-confi
 
 parallels: coreos-parallels.box
 
-coreos-parallels.box: tmp/CoreOS.vmdk parallels/metadata.json parallels/override-plugin.rb parallels/Vagrantfile
+coreos-parallels.box: tmp/CoreOS.vmdk parallels/metadata.json parallels/change_host_name.rb parallels/configure_networks.rb parallels/Vagrantfile
 	vagrant halt -f
 	#
 	# Convert VMDK to HDD
@@ -76,9 +76,13 @@ parallels/metadata.json:
 	mkdir -p parallels
 	echo '{"provider": "parallels"}' > parallels/metadata.json
 
-parallels/override-plugin.rb: box/override-plugin.rb
+parallels/change_host_name.rb: box/change_host_name.rb
 	mkdir -p parallels
-	cp box/override-plugin.rb parallels/override-plugin.rb
+	cp box/change_host_name.rb parallels/change_host_name.rb
+
+parallels/configure_networks.rb: box/configure_networks.rb
+	mkdir -p parallels
+	cp box/configure_networks.rb parallels/configure_networks.rb
 
 parallels/Vagrantfile: box/vagrantfile.tpl
 	mkdir -p parallels
