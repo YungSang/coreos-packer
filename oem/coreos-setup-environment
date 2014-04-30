@@ -7,11 +7,6 @@ if [ -z "$ENV" ]; then
     exit 1
 fi
 
-# skip if COREOS_PUBLIC_IPV4 is already set
-if grep -qs ^COREOS_PUBLIC_IPV4 "$ENV"; then
-    exit
-fi
-
 function get_interfaces {
     # just wait for interfaces to be ready
     while :; do

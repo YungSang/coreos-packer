@@ -22,11 +22,30 @@ coreos:
 
     - name: coreos-cloudinit-vagrant-user.path
       command: start
-      runtime: yes
+      runtime: no
       content: |
         [Path]
         PathExists=/var/lib/coreos-vagrant/vagrantfile-user-data
-        Unit=user-cloudinit@var-lib-coreos\x2dvagrant-vagrantfile\x2duser\x2ddata.service
+
+    - name: coreos-cloudinit-vagrant-user.service
+      runtime: no
+      content: |
+        [Unit]
+        ConditionFileNotEmpty=/var/lib/coreos-vagrant/vagrantfile-user-data
+
+        [Service]
+        Type=oneshot
+        EnvironmentFile=/etc/environment
+        ExecStart=/usr/bin/coreos-cloudinit --from-file /var/lib/coreos-vagrant/vagrantfile-user-data
+        RemainAfterExit=yes
+
+#    - name: coreos-cloudinit-vagrant-user.path
+#      command: start
+#      runtime: yes
+#      content: |
+#        [Path]
+#        PathExists=/var/lib/coreos-vagrant/vagrantfile-user-data
+#        Unit=user-cloudinit@var-lib-coreos\x2dvagrant-vagrantfile\x2duser\x2ddata.service
 
     - name: docker-tcp.socket
       command: start
