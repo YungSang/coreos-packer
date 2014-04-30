@@ -31,18 +31,23 @@ function get_ipv4 {
     echo $ipv4
 }
 
+function set_coreos_ipv4 {
+    sed -i '/^COREOS_PUBLIC_IPV4/d' "$ENV"
+    sed -i '/^COREOS_PRIVATE_IPV4/d' "$ENV"
+    echo "COREOS_PUBLIC_IPV4=$1" >> "$ENV"
+    echo "COREOS_PRIVATE_IPV4=$2" >> "$ENV"
+}
+
 ifaces=$(get_interfaces)
 ifaces=($ifaces)
 
 private_ipv4=$(get_ipv4 ${ifaces[0]})
 
 if [ -z "${ifaces[1]}" ]; then
-    echo "COREOS_PUBLIC_IPV4=${private_ipv4}" >> "$ENV"
-    echo "COREOS_PRIVATE_IPV4=${private_ipv4}" >> "$ENV"
+    set_coreos_ipv4 "${private_ipv4}" "${private_ipv4}"
     exit
 fi
 
 public_ipv4=$(get_ipv4 ${ifaces[1]})
 
-echo "COREOS_PUBLIC_IPV4=${public_ipv4}" >> $ENV
-echo "COREOS_PRIVATE_IPV4=${private_ipv4}" >> $ENV
+set_coreos_ipv4 "${public_ipv4}" "${private_ipv4}"
