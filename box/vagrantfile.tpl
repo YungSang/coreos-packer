@@ -1,3 +1,8 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+Vagrant.require_version ">= 1.5.4"
+
 require_relative "override-plugin.rb"
 
 Vagrant.configure("2") do |config|
