@@ -7,7 +7,7 @@ coreos:
   oem:
     id: vagrant
     name: CoreOS.box for Vagrant
-    version-id: 0.8.0
+    version-id: %VERSION_ID%+%BUILD_ID%
     home-url: https://vagrantcloud.com/yungsang/coreos
     bug-report-url: https://github.com/YungSang/coreos-packer
 

@@ -1,6 +1,9 @@
 VM_NAME  := CoreOS Packer
 BOX_NAME := CoreOS Box
 
+VERSION_ID := 0.9.0
+BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
+
 PWD := `pwd`
 
 box: coreos.box
@@ -30,7 +33,7 @@ coreos.box: tmp/CoreOS.vmdk box/override-plugin.rb box/vagrantfile.tpl
 	cd box; \
 	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include override-plugin.rb --vagrantfile vagrantfile.tpl
 
-tmp/CoreOS.vmdk: tmp/coreos-install oem/coreos-setup-environment oem/cloud-config.yml
+tmp/CoreOS.vmdk: Vagrantfile oem/coreos-setup-environment tmp/coreos-install tmp/cloud-config.yml
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
 	vagrant provision
@@ -89,10 +92,9 @@ tmp/coreos-install:
 	curl -L https://raw.github.com/coreos/init/master/bin/coreos-install -o tmp/coreos-install
 	chmod +x tmp/coreos-install
 
-tmp/coreos-setup-environment:
+tmp/cloud-config.yml: oem/cloud-config.yml
 	mkdir -p tmp
-	curl -L https://raw.github.com/coreos/coreos-overlay/master/coreos-base/oem-vagrant/files/coreos-setup-environment -o tmp/coreos-setup-environment
-	chmod +x tmp/coreos-setup-environment
+	sed -e "s/%VERSION_ID%/${VERSION_ID}/g" -e "s/%BUILD_ID%/${BUILD_ID}/g" oem/cloud-config.yml > tmp/cloud-config.yml
 
 test: coreos.box
 	-vagrant box remove coreos --provider virtualbox
