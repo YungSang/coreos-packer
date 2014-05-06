@@ -121,7 +121,8 @@ ptest: coreos-parallels.box
 	BOX_NAME="coreos" vagrant destroy -f; \
 	BOX_NAME="coreos" vagrant up --provider parallels; \
 	echo "-----> docker version"; \
-	BOX_NAME="coreos" vagrant ssh -c "docker version"; \
+	DOCKER_HOST="tcp://`BOX_NAME="coreos" vagrant ssh-config | sed -n "s/[ ]*HostName[ ]*//gp"`:4243"; \
+	docker version; \
 	echo "-----> /etc/os-release"; \
 	BOX_NAME="coreos" vagrant ssh -c "cat /etc/os-release"; \
 	echo "-----> /etc/oem-release"; \
