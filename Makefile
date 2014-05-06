@@ -97,8 +97,7 @@ tmp/cloud-config.yml: oem/cloud-config.yml
 	sed -e "s/%VERSION_ID%/${VERSION_ID}/g" -e "s/%BUILD_ID%/${BUILD_ID}/g" oem/cloud-config.yml > tmp/cloud-config.yml
 
 test: coreos.box
-	-vagrant box remove coreos --provider virtualbox
-	vagrant box add coreos coreos.box
+	vagrant box add -f coreos coreos.box
 	cd test; \
 	BOX_NAME="coreos" vagrant destroy -f; \
 	BOX_NAME="coreos" vagrant up; \
@@ -121,8 +120,7 @@ test: coreos.box
 	BOX_NAME="coreos" vagrant suspend
 
 ptest: coreos-parallels.box
-	-vagrant box remove coreos --provider parallels
-	vagrant box add coreos coreos-parallels.box --provider parallels
+	vagrant box add -f coreos coreos-parallels.box --provider parallels
 	cd test; \
 	BOX_NAME="coreos" vagrant destroy -f; \
 	BOX_NAME="coreos" vagrant up --provider parallels; \

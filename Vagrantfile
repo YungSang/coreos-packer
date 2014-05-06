@@ -35,7 +35,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provision :shell do |s|
     s.inline = <<-EOT
-      sudo /vagrant/tmp/coreos-install -d /dev/sdb
+      sudo /vagrant/tmp/coreos-install -d /dev/sdb 2> /dev/null
       sudo mount /dev/sdb6 /mnt
       sudo cp /vagrant/tmp/cloud-config.yml /mnt/
       sudo mkdir -p /mnt/bin
