@@ -7,26 +7,61 @@ if [ -z "$ENV" ]; then
     exit 1
 fi
 
-# just wait for interfaces to be ready
-ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
-while [ -z "$ifaces" ]; do
-    sleep 0.1
-    ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
-done
+function get_interfaces {
+    # just wait for interfaces to be ready
+    while :; do
+        ifaces=$(ifconfig | grep ^enp0 | cut -f1 -d: | tr "\n" " ")
+        if [ -n "$ifaces" ]; then
+            break
+        fi
+        sleep 0.1
+    done
+    echo $ifaces
+}
 
+function get_ipv4 {
+    # just wait for the interface to be ready
+    while :; do
+        ipv4=$(ifconfig $1 | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' ')
+        if [ -n "$ipv4" ]; then
+            break
+        fi
+        sleep 0.1
+    done
+    echo $ipv4
+}
+
+function set_coreos_ipv4 {
+    sed -i '/^COREOS_PUBLIC_IPV4/d' "$ENV"
+    sed -i '/^COREOS_PRIVATE_IPV4/d' "$ENV"
+    echo "COREOS_PUBLIC_IPV4=$1" >> "$ENV"
+    echo "COREOS_PRIVATE_IPV4=$2" >> "$ENV"
+}
+
+ifaces=$(get_interfaces)
+sleep 1 # just sleep 1s to make sure
+ifaces=$(get_interfaces)
 ifaces=($ifaces)
+
+private_ipv4=$(get_ipv4 ${ifaces[0]})
+
 if [ -z "${ifaces[1]}" ]; then
-    exit 0
+    echo "No network configuration provided by Vagrant!" >&2
+    echo "Using ${private_ipv4}, for public and private IPs" >&2
+    set_coreos_ipv4 "${private_ipv4}" "${private_ipv4}"
+    exit
 fi
 
-# just block until the second interface is ready
-ipaddr=`ifconfig ${ifaces[1]} | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
-while [ -z "$ipaddr" ]; do
-    sleep 0.1
-    ifaces=`ifconfig | grep enp0 | cut -f1 -d: | tr "\n" " "`
-    ifaces=($ifaces)
-    ipaddr=`ifconfig ${ifaces[1]} | grep 'inet ' | sed 's/^ *//' | cut -f 2 -d ' '`
-done
+now=$(date +%s)
+timeout=$(( now + 60 ))
 
-echo "COREOS_PUBLIC_IPV4=${ipaddr}" >> $ENV
-echo "COREOS_PRIVATE_IPV4=${ipaddr}" >> $ENV
+# just block until cloudinit updates environment
+while ! grep -qs ^COREOS_PUBLIC_IPV4 "$ENV"; do
+    if [[ $timeout -lt $(date +%s) ]]; then
+        echo "No network configuration provided by Vagrant!" >&2
+        echo "Using ${private_ipv4}, for public and private IPs" >&2
+        set_coreos_ipv4 "${private_ipv4}" "${private_ipv4}"
+        exit
+    fi
+    sleep 0.1
+done
