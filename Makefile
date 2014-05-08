@@ -119,6 +119,8 @@ test: coreos.box
 	BOX_NAME="coreos" vagrant ssh -c "cat /etc/environment"; \
 	echo "-----> /etc/systemd/network/50-vagrant*.network"; \
 	BOX_NAME="coreos" vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
+	echo "-----> route"; \
+	BOX_NAME="coreos" vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
 	BOX_NAME="coreos" vagrant ssh -c "systemctl list-units --no-pager"; \
 	BOX_NAME="coreos" vagrant suspend
@@ -143,6 +145,8 @@ ptest: coreos-parallels.box
 	BOX_NAME="coreos" vagrant ssh -c "cat /etc/environment"; \
 	echo "-----> /etc/systemd/network/50-vagrant*.network"; \
 	BOX_NAME="coreos" vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
+	echo "-----> route"; \
+	BOX_NAME="coreos" vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
 	BOX_NAME="coreos" vagrant ssh -c "systemctl list-units --no-pager"; \
 	BOX_NAME="coreos" vagrant suspend
