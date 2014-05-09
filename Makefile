@@ -3,6 +3,7 @@ BOX_NAME := CoreOS Box
 
 VERSION_ID := 0.9.0
 BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
+CHANNEL    := beta
 
 PWD := `pwd`
 
@@ -36,7 +37,7 @@ coreos.box: tmp/CoreOS.vmdk box/change_host_name.rb box/configure_networks.rb bo
 tmp/CoreOS.vmdk: Vagrantfile oem/coreos-setup-environment tmp/coreos-install tmp/cloud-config.yml
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
-	vagrant provision
+	CHANNEL="${CHANNEL}" vagrant provision
 	vagrant suspend
 
 parallels: coreos-parallels.box

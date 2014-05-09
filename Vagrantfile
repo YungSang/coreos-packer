@@ -34,8 +34,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   config.vm.provision :shell do |s|
+    channel = ENV['CHANNEL'] || "beta"
+
     s.inline = <<-EOT
-      sudo /vagrant/tmp/coreos-install -d /dev/sdb 2> /dev/null
+      echo Installing CoreOS #{channel}
+      sudo /vagrant/tmp/coreos-install -d /dev/sdb -V #{channel} 2> /dev/null
       sudo mount /dev/sdb6 /mnt
       sudo cp /vagrant/tmp/cloud-config.yml /mnt/
       sudo mkdir -p /mnt/bin
