@@ -12,6 +12,16 @@ coreos:
     bug-report-url: https://github.com/YungSang/coreos-packer
 
   units:
+    - name: motdgen.service
+      command: restart
+      content: |
+        [Unit]
+        Description=Generate /run/coreos/motd
+        Before=systemd-user-sessions.service
+
+        [Service]
+        ExecStart=/usr/share/oem/bin/motdgen
+
     - name: coreos-cloudinit-vagrant-mkdir.service
       command: start
       runtime: yes
