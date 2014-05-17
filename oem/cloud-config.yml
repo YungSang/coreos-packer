@@ -13,13 +13,14 @@ coreos:
 
   units:
     - name: motdgen.service
-      command: restart
+      command: start
       content: |
         [Unit]
         Description=Generate /run/coreos/motd
         Before=systemd-user-sessions.service
 
         [Service]
+        Type=oneshot
         ExecStart=/usr/share/oem/bin/motdgen
 
     - name: coreos-cloudinit-vagrant-mkdir.service
