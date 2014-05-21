@@ -94,8 +94,12 @@ parallels/Vagrantfile: box/vagrantfile.tpl
 
 tmp/coreos-install:
 	mkdir -p tmp
+ifneq ($(CHANNEL),master)
 	curl -L https://raw.github.com/coreos/init/master/bin/coreos-install -o tmp/coreos-install
 	chmod +x tmp/coreos-install
+else
+	cp oem/coreos-install tmp/coreos-install
+endif
 
 tmp/cloud-config.yml: oem/cloud-config.yml
 	mkdir -p tmp
