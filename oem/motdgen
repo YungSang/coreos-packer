@@ -14,7 +14,7 @@ if [ -f /usr/share/oem/motd ]; then
 	cat /usr/share/oem/motd > /run/coreos/motd
 	echo -e "(${GROUP} ${VERSION})" >> /run/coreos/motd
 else
-	echo -e "Core\033[38;5;45mO\033[38;5;206mS\033[39m (${GROUP})" > /run/coreos/motd
+	echo -e "Core\033[38;5;206mO\033[38;5;45mS\033[39m (${GROUP})" > /run/coreos/motd
 fi
 
 if ! systemctl is-active locksmithd > /dev/null; then
