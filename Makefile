@@ -105,56 +105,72 @@ tmp/cloud-config.yml: oem/cloud-config.yml
 	mkdir -p tmp
 	sed -e "s/%VERSION_ID%/${VERSION_ID}/g" -e "s/%BUILD_ID%/${BUILD_ID}/g" oem/cloud-config.yml > tmp/cloud-config.yml
 
-test: coreos.box
-	vagrant box add -f coreos coreos.box
-	cd test; \
-	BOX_NAME="coreos" vagrant destroy -f; \
-	BOX_NAME="coreos" vagrant up; \
+test: test/Vagrantfile coreos.box
+	@vagrant box add -f coreos coreos.box
+	@cd test; \
+	vagrant destroy -f; \
+	vagrant up; \
 	echo "-----> docker version"; \
 	docker version; \
+	echo "-----> docker images -t"; \
+	docker images -t; \
+	echo "-----> docker ps -a"; \
+	docker ps -a; \
+	echo "-----> nc localhost 8080"; \
+	nc localhost 8080; \
 	echo "-----> /etc/os-release"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/os-release"; \
+	vagrant ssh -c "cat /etc/os-release"; \
 	echo "-----> /etc/oem-release"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/oem-release"; \
+	vagrant ssh -c "cat /etc/oem-release"; \
 	echo "-----> /etc/machine-id"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/machine-id"; \
+	vagrant ssh -c "cat /etc/machine-id"; \
 	echo "-----> /etc/hostname"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/hostname"; \
+	vagrant ssh -c "cat /etc/hostname"; \
 	echo "-----> /etc/environment"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/environment"; \
+	vagrant ssh -c "cat /etc/environment"; \
 	echo "-----> /etc/systemd/network/50-vagrant*.network"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
+	vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
 	echo "-----> route"; \
-	BOX_NAME="coreos" vagrant ssh -c "route"; \
+	vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
-	BOX_NAME="coreos" vagrant ssh -c "systemctl list-units --no-pager"; \
-	BOX_NAME="coreos" vagrant suspend
+	vagrant ssh -c "systemctl list-units --no-pager"; \
+	vagrant suspend
 
-ptest: coreos-parallels.box
-	vagrant box add -f coreos coreos-parallels.box --provider parallels
-	cd test; \
-	BOX_NAME="coreos" vagrant destroy -f; \
-	BOX_NAME="coreos" vagrant up --provider parallels; \
+ptest: DOCKER_HOST_IP=$(shell cd test; vagrant ssh-config | sed -n "s/[ ]*HostName[ ]*//gp")
+ptest: ptestup
+	@cd test; \
 	echo "-----> docker version"; \
-	DOCKER_HOST="tcp://`BOX_NAME="coreos" vagrant ssh-config | sed -n "s/[ ]*HostName[ ]*//gp"`:4243"; \
+	DOCKER_HOST="tcp://${DOCKER_HOST_IP}:4243"; \
 	docker version; \
+	echo "-----> docker images -t"; \
+	docker images -t; \
+	echo "-----> docker ps -a"; \
+	docker ps -a; \
+	echo "-----> nc ${DOCKER_HOST_IP} 8080"; \
+	nc ${DOCKER_HOST_IP} 8080; \
 	echo "-----> /etc/os-release"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/os-release"; \
+	vagrant ssh -c "cat /etc/os-release"; \
 	echo "-----> /etc/oem-release"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/oem-release"; \
+	vagrant ssh -c "cat /etc/oem-release"; \
 	echo "-----> /etc/machine-id"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/machine-id"; \
+	vagrant ssh -c "cat /etc/machine-id"; \
 	echo "-----> /etc/hostname"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/hostname"; \
+	vagrant ssh -c "cat /etc/hostname"; \
 	echo "-----> /etc/environment"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/environment"; \
+	vagrant ssh -c "cat /etc/environment"; \
 	echo "-----> /etc/systemd/network/50-vagrant*.network"; \
-	BOX_NAME="coreos" vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
+	vagrant ssh -c "cat /etc/systemd/network/50-vagrant*.network"; \
 	echo "-----> route"; \
-	BOX_NAME="coreos" vagrant ssh -c "route"; \
+	vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
-	BOX_NAME="coreos" vagrant ssh -c "systemctl list-units --no-pager"; \
-	BOX_NAME="coreos" vagrant suspend
+	vagrant ssh -c "systemctl list-units --no-pager"; \
+	vagrant suspend
+
+ptestup: test/Vagrantfile coreos-parallels.box
+	@vagrant box add -f coreos coreos-parallels.box --provider parallels
+	@cd test; \
+	vagrant destroy -f; \
+	vagrant up --provider parallels; \
 
 clean:
 	vagrant destroy -f
