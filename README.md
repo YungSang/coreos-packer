@@ -41,10 +41,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/home/core/vagrant", id: "core", type: "nfs",  mount_options: ['nolock,vers=3,udp']
 
   config.vm.provision :docker do |d|
-    d.pull_images "busybox"
-    d.run "busybox",
-      cmd: "echo hello"
+    d.pull_images "google/busybox"
+    d.run "simple-echo",
+      image: "google/busybox",
+      args: "-p 8080:8080",
+      cmd: "nc -p 8080 -l -l -e echo hello world!"
   end
+
+  config.vm.network :forwarded_port, guest: 8080, host: 8080
 end
 ```
 
@@ -53,6 +57,8 @@ $ vagrant up
 $ docker version
 $ docker images -t
 $ docker ps -a
+$ nc localhost 8080
+hello world!
 ```
 
 ## License
