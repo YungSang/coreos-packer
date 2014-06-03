@@ -11,7 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = ENV['BOX_NAME'] || "coreos"
 
-  config.vm.network "forwarded_port", guest: 4243, host: 4243
+  config.vm.network "forwarded_port", guest: 2375, host: 2375
 
   config.vm.provider :virtualbox do |vb, override|
     override.vm.network :private_network, ip: "192.168.33.10"
