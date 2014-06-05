@@ -16,6 +16,7 @@ Vagrant.configure("2") do |config|
   config.vm.provider :virtualbox do |vb|
     # Guest Additions are unavailable.
     vb.check_guest_additions = false
+    vb.functional_vboxsf     = false
 
     # Fix docker not being able to resolve private registry in VirtualBox
     vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -25,5 +26,6 @@ Vagrant.configure("2") do |config|
   config.vm.provider :parallels do |prl|
     # Guest Tools are unavailable.
     prl.check_guest_tools = false
+    prl.functional_psf    = false
  end
 end
