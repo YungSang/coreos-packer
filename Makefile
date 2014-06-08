@@ -111,6 +111,7 @@ test: test/Vagrantfile coreos.box
 	vagrant destroy -f; \
 	vagrant up; \
 	echo "-----> docker version"; \
+	DOCKER_HOST="tcp://localhost:2375"; \
 	docker version; \
 	echo "-----> docker images -t"; \
 	docker images -t; \
@@ -140,7 +141,7 @@ ptest: DOCKER_HOST_IP=$(shell cd test; vagrant ssh-config | sed -n "s/[ ]*HostNa
 ptest: ptestup
 	@cd test; \
 	echo "-----> docker version"; \
-	DOCKER_HOST="tcp://${DOCKER_HOST_IP}:4243"; \
+	DOCKER_HOST="tcp://${DOCKER_HOST_IP}:2375"; \
 	docker version; \
 	echo "-----> docker images -t"; \
 	docker images -t; \
