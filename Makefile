@@ -181,4 +181,4 @@ clean:
 	rm -f coreos-parallels.box
 	rm -rf parallels/
 
-.PHONY: clean
+.PHONY: box test clean
