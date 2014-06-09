@@ -9,7 +9,7 @@ Build a Vagrant box with CoreOS
 - Add OEM files for Vagrant and patch them
     - Cf.) https://github.com/coreos/coreos-overlay/pull/568
     - Cf.) https://github.com/YungSang/coreos-packer/tree/overlay-568
-- Enable the Docker daemon and open the port 4243
+- Enable the Docker daemon and open the port 2375
 
 ## How to Build
 
@@ -35,7 +35,7 @@ Vagrant.require_version ">= 1.5.0"
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "yungsang/coreos"
 
-  config.vm.network "forwarded_port", guest: 4243, host: 4243
+  config.vm.network "forwarded_port", guest: 2375, host: 2375
 
   config.vm.network "private_network", ip: "192.168.33.10"
 
