@@ -28,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 #    override.vm.network :public_network, bridge: "en0", ip: "192.168.1.201"
   end
 
-  config.vm.synced_folder ".", "/home/core/vagrant", id: "core", type: "nfs",  mount_options: ["nolock", "vers=3", "udp"]
+  config.vm.synced_folder ".", "/home/core/vagrant", id: "core", type: "nfs", mount_options: ["nolock", "vers=3", "udp"]
 
   config.vm.provision :docker do |d|
     d.pull_images "yungsang/busybox"
