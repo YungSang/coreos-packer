@@ -7,6 +7,10 @@ VAGRANTFILE_API_VERSION = "2"
 Vagrant.require_version ">= 1.5.0"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.define "coreos-packer"
+
+  config.vm.hostname = "coreos-packer"
+
   config.vm.box = "hashicorp/precise64"
 
   config.vm.synced_folder ".", "/vagrant"
