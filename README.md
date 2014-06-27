@@ -2,10 +2,11 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS **Beta** 324.3.0
-    - Etcd v0.3.0
-    - **Fleet v0.3.3**
-    - **Docker v0.11.1**
+- Based on CoreOS **Beta** 353.0.0
+    - **kernel v3.15.1**
+    - **etcd v0.4.3, etcdctl v0.4.3**
+    - **fleet v0.5.0**
+    - **docker v1.0.0**
 - Add OEM files for Vagrant and patch them
     - Cf.) https://github.com/coreos/coreos-overlay/pull/568
     - Cf.) https://github.com/YungSang/coreos-packer/tree/overlay-568
