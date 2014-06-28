@@ -135,6 +135,8 @@ test: test/Vagrantfile coreos.box
 	vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
 	vagrant ssh -c "systemctl list-units --no-pager"; \
+	echo '-----> docker-enter `docker ps -l -q` ls -l'; \
+	vagrant ssh -c 'docker-enter `docker ps -l -q` ls -l'; \
 	vagrant suspend
 
 ptest: DOCKER_HOST_IP=$(shell cd test; vagrant ssh-config | sed -n "s/[ ]*HostName[ ]*//gp")
@@ -165,6 +167,8 @@ ptest: ptestup
 	vagrant ssh -c "route"; \
 	echo "-----> systemctl list-units"; \
 	vagrant ssh -c "systemctl list-units --no-pager"; \
+	echo '-----> docker-enter `docker ps -l -q` ls -l'; \
+	vagrant ssh -c 'docker-enter `docker ps -l -q` ls -l'; \
 	vagrant suspend
 
 ptestup: test/Vagrantfile coreos-parallels.box
