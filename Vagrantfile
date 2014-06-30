@@ -49,7 +49,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       sudo cp /vagrant/oem/coreos-setup-environment /mnt/bin/
       sudo cp /vagrant/oem/motd /mnt/
       sudo cp /vagrant/oem/motdgen /mnt/bin/
-      sudo cp /vagrant/oem/docker-enter /mnt/bin/
+      sudo cp /vagrant/tmp/docker-enter /mnt/bin/
       sudo umount /mnt
     EOT
   end

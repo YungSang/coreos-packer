@@ -34,7 +34,8 @@ coreos.box: tmp/CoreOS.vmdk box/change_host_name.rb box/configure_networks.rb bo
 	cd box; \
 	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include change_host_name.rb,configure_networks.rb --vagrantfile vagrantfile.tpl
 
-tmp/CoreOS.vmdk: Vagrantfile oem/coreos-setup-environment tmp/coreos-install tmp/cloud-config.yml
+tmp/CoreOS.vmdk: Vagrantfile oem/coreos-setup-environment oem/motd oem/motdgen \
+ 	tmp/coreos-install tmp/cloud-config.yml tmp/docker-enter
 	vagrant destroy -f
 	VM_NAME="${VM_NAME}" vagrant up --no-provision
 	CHANNEL="${CHANNEL}" vagrant provision
@@ -104,6 +105,10 @@ endif
 tmp/cloud-config.yml: oem/cloud-config.yml
 	mkdir -p tmp
 	sed -e "s/%VERSION_ID%/${VERSION_ID}/g" -e "s/%BUILD_ID%/${BUILD_ID}/g" oem/cloud-config.yml > tmp/cloud-config.yml
+
+tmp/docker-enter:
+	curl -L https://raw.githubusercontent.com/YungSang/docker-attach/master/docker-nsenter -o tmp/docker-enter
+	chmod +x tmp/docker-enter
 
 test: test/Vagrantfile coreos.box
 	@vagrant box add -f coreos coreos.box
