@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # # vi: set ft=ruby :
 
-Vagrant.require_version ">= 1.5.4"
+Vagrant.require_version ">= 1.6.0"
 
 require_relative "change_host_name.rb"
 require_relative "configure_networks.rb"
