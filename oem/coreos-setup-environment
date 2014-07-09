@@ -7,6 +7,8 @@ if [ -z "$ENV" ]; then
     exit 1
 fi
 
+touch "$ENV"
+
 function get_interfaces {
     # just wait for interfaces to be ready
     while :; do
