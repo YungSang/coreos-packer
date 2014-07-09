@@ -64,5 +64,5 @@ coreos:
         [Service]
         Type=oneshot
         ExecStartPre=/bin/mkdir -p /opt/bin
-        ExecStart=/usr/bin/ln -s /usr/share/oem/bin/docker-enter /opt/bin/docker-enter
-        ExecStart=/usr/bin/ln -s /usr/share/oem/bin/docker-enter /opt/bin/docker-attach
+        ExecStart=/usr/bin/ln -s -f /usr/share/oem/bin/docker-enter /opt/bin/docker-enter
+        ExecStart=/usr/bin/ln -s -f /usr/share/oem/bin/docker-enter /opt/bin/docker-attach
