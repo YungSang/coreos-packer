@@ -2,15 +2,18 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS **Beta** 353.0.0
-    - **kernel v3.15.1**
-    - **etcd v0.4.3, etcdctl v0.4.3**
-    - **fleet v0.5.0**
-    - **docker v1.0.0**
+- Based on CoreOS **Beta** 367.1.0
+    - **kernel v3.15.2**
+    - **etcd v0.4.4, etcdctl v0.4.4**
+    - fleet v0.5.0
+    - **docker v1.0.1**
+    - **coreos-cloudinit v0.8.9**
 - Add OEM files for Vagrant and patch them
     - Cf.) https://github.com/coreos/coreos-overlay/pull/568
     - Cf.) https://github.com/YungSang/coreos-packer/tree/overlay-568
-- Enable the Docker daemon and open the port 2375
+- Enable the Docker daemon
+- Open the official IANA registered **[Docker port 2375](http://www.iana.org/assignments/service-names-port-numbers/service-names-port-numbers.xhtml?search=docker)**
+- **Add `docker-enter`(`docker-attach`) script to use `nsenter` easily**
 
 ## How to Build
 
