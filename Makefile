@@ -1,7 +1,7 @@
 VM_NAME  := CoreOS Packer
 BOX_NAME := CoreOS Box
 
-VERSION_ID := 0.9.16
+VERSION_ID := 0.9.17
 BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
 CHANNEL    := beta
 
