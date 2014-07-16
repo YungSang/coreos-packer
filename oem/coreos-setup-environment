@@ -12,7 +12,7 @@ touch "$ENV"
 function get_interfaces {
     # just wait for interfaces to be ready
     while :; do
-        ifaces=$(ifconfig | grep ^enp0 | cut -f1 -d: | tr "\n" " ")
+        ifaces=$(ifconfig | grep -E '^(en|eth)' | cut -f1 -d: | tr "\n" " ")
         if [ -n "$ifaces" ]; then
             break
         fi

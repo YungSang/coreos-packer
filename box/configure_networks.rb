@@ -121,7 +121,7 @@ module VagrantPlugins
 
           machine.communicate.tap do |comm|
             interfaces = []
-            comm.sudo("ifconfig | grep ^en | cut -f1 -d:") do |_, result|
+            comm.sudo("ifconfig | grep -E '^(en|eth)' | cut -f1 -d:") do |_, result|
               interfaces = result.split("\n")
             end
 
@@ -154,7 +154,7 @@ module VagrantPlugins
         def self.match_by_name(machine)
           match = {}
           machine.communicate.tap do |comm|
-            comm.sudo("ifconfig -a | grep ^en | cut -f1 -d:") do |_, result|
+            comm.sudo("ifconfig -a | grep -E '^(en|eth)' | cut -f1 -d:") do |_, result|
               result.split("\n").each_with_index do |name, interface|
                 match[interface] = "Name=#{name}"
               end
