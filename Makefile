@@ -33,6 +33,7 @@ coreos.box: tmp/CoreOS.vmdk box/change_host_name.rb box/configure_networks.rb bo
 	rm -f coreos.box
 	cd box; \
 	vagrant package --base "${BOX_NAME}" --output ../coreos.box --include change_host_name.rb,configure_networks.rb --vagrantfile vagrantfile.tpl
+	VBoxManage unregistervm "${BOX_NAME}" --delete
 
 tmp/CoreOS.vmdk: Vagrantfile oem/coreos-setup-environment oem/motd oem/motdgen \
  	tmp/coreos-install tmp/cloud-config.yml tmp/docker-enter
@@ -65,6 +66,8 @@ coreos-parallels.box: tmp/CoreOS.vmdk parallels/metadata.json parallels/change_h
 	-prlctl unregister "${BOX_NAME}"
 	rm -rf "Parallels/${BOX_NAME}.pvm"
 	prlctl clone "${VM_NAME}" --name "${BOX_NAME}" --template --dst "${PWD}/parallels"
+	prlctl unregister "${VM_NAME}"
+	rm -rf "${HOME}/Documents/Parallels/${VM_NAME}.pvm"
 	#
 	# Clean up
 	#
@@ -184,7 +187,6 @@ ptestup: test/Vagrantfile coreos-parallels.box
 
 clean:
 	vagrant destroy -f
-	-VBoxManage unregistervm "${BOX_NAME}" --delete
 	cd test; vagrant destroy -f
 	rm -f coreos.box
 	rm -rf tmp/
