@@ -1,7 +1,7 @@
 VM_NAME  := CoreOS Packer
 BOX_NAME := CoreOS Box
 
-VERSION_ID := 1.2.6
+VERSION_ID := 1.2.7
 BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
 CHANNEL    := stable
 
