@@ -2,7 +2,7 @@
 
 Build a Vagrant box with CoreOS
 
-- Based on CoreOS **Stable** 444.4.0
+- Based on CoreOS **Stable** 444.5.0
     - **kernel v3.16.2**
     - etcd v0.4.6
     - **fleet v0.8.3**
