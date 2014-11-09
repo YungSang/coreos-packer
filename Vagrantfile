@@ -24,7 +24,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     vb.customize [
       "createhd",
       "--filename", "tmp/CoreOS",
-      "--size", "40000",
+      "--size", "40960",
       "--format", "VMDK",
     ]
     vb.customize [
