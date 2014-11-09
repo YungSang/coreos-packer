@@ -35,6 +35,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "--type", "hdd",
       "--medium", "tmp/CoreOS.vmdk",
     ]
+    (1..8).each do |i|
+      vb.customize [
+        "modifyvm", :id,
+        "--nictype#{i}", "virtio"
+      ]
+    end
   end
 
   config.vm.provision :shell do |s|
