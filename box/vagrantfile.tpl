@@ -9,6 +9,7 @@ require_relative "configure_networks.rb"
 Vagrant.configure("2") do |config|
   # SSH in as the default 'core' user, it has the vagrant ssh key.
   config.ssh.username = "core"
+  config.ssh.insert_key = false
 
   # Disable the base shared folder, Guest Additions are unavailable.
   config.vm.synced_folder ".", "/vagrant", disabled: true
