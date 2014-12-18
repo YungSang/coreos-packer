@@ -1,7 +1,7 @@
 VM_NAME  := CoreOS Packer
 BOX_NAME := CoreOS Box
 
-VERSION_ID := 1.3.8
+VERSION_ID := 1.4.7
 BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
 CHANNEL    := stable
 
@@ -144,6 +144,8 @@ test: test/Vagrantfile coreos.box
 	vagrant ssh -c "systemctl list-units --no-pager"; \
 	echo '-----> docker-enter `docker ps -l -q` ls -l'; \
 	vagrant ssh -c 'docker-enter `docker ps -l -q` ls -l'; \
+	echo '-----> docker exec `docker ps -l -q` ls -l'; \
+	docker exec `docker ps -l -q` ls -l; \
 	vagrant suspend
 
 ptest: DOCKER_HOST_IP=$(shell cd test; vagrant ssh-config | sed -n "s/[ ]*HostName[ ]*//gp")
@@ -176,6 +178,8 @@ ptest: ptestup
 	vagrant ssh -c "systemctl list-units --no-pager"; \
 	echo '-----> docker-enter `docker ps -l -q` ls -l'; \
 	vagrant ssh -c 'docker-enter `docker ps -l -q` ls -l'; \
+	echo '-----> docker exec `docker ps -l -q` ls -l'; \
+	docker exec `docker ps -l -q` ls -l; \
 	vagrant suspend
 
 ptestup: test/Vagrantfile coreos-parallels.box

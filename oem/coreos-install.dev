@@ -37,6 +37,7 @@ Options:
     -c CLOUD    Insert a cloud-init config to be executed on boot.
     -t TMPDIR   Temporary location with enough space to download images.
     -v          Super verbose, for debugging.
+    -b BASEURL  URL to the image mirror
     -h          This ;-)
 
 This tool installs CoreOS on a block device. If you PXE booted CoreOS on a
@@ -169,6 +170,7 @@ do
         c) CLOUDINIT="$OPTARG" ;;
         t) export TMPDIR="$OPTARG" ;;
         v) set -x ;;
+        b) BASE_URL="$OPTARG" ;;
         h) echo "$USAGE"; exit;;
         *) exit 1;;
     esac
@@ -190,9 +192,20 @@ if [[ ! -w "${DEVICE}" ]]; then
     exit 1
 fi
 
-if [[ -n "${CLOUDINIT}" && ! -f "${CLOUDINIT}" ]]; then
-    echo "$0: Cloud config file (${CLOUDINIT}) does not exist." >&2
-    exit 1
+if [[ -n "${CLOUDINIT}" ]]; then
+    if [[ ! -f "${CLOUDINIT}" ]]; then
+        echo "$0: Cloud config file (${CLOUDINIT}) does not exist." >&2
+        exit 1
+    fi
+
+    if type -P coreos-cloudinit >/dev/null; then
+        if ! coreos-cloudinit -from-file="${CLOUDINIT}" -validate; then
+            echo "$0: Cloud config file (${CLOUDINIT}) is not valid." >&2
+            exit 1
+        fi
+    else
+        echo "$0: coreos-cloudinit not found. Could not validate config. Continuing..." >&2
+    fi
 fi
 
 if [[ -n "${OEM_ID}" ]]; then
@@ -201,7 +214,9 @@ else
     IMAGE_NAME="coreos_production_image.bin.bz2"
 fi
 
-BASE_URL="http://storage.core-os.net/coreos/amd64-usr/${CHANNEL_ID}"
+if [[ -z "${BASE_URL}" ]]; then
+    BASE_URL="http://storage.core-os.net/coreos/amd64-usr/${CHANNEL_ID}"
+fi
 IMAGE_URL="${BASE_URL}/${IMAGE_NAME}"
 SIG_NAME="${IMAGE_NAME}.sig"
 SIG_URL="${BASE_URL}/${SIG_NAME}"
