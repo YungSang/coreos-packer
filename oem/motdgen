@@ -7,14 +7,14 @@
 # We want to grab the GROUP variable
 [ -e /usr/share/coreos/update.conf ] && source /usr/share/coreos/update.conf
 [ -e /etc/coreos/update.conf ] && source /etc/coreos/update.conf
-[ -e /etc/os-release ] && source /etc/os-release
+[ -e /usr/lib/os-release ] && source /usr/lib/os-release
 
 mkdir -p /run/coreos
 if [ -f /usr/share/oem/motd ]; then
 	cat /usr/share/oem/motd > /run/coreos/motd
-	echo -e "(${GROUP} ${VERSION})" >> /run/coreos/motd
+	echo -e "${GROUP} (${VERSION})" >> /run/coreos/motd
 else
-	echo -e "Core\033[38;5;206mO\033[38;5;45mS\033[39m (${GROUP})" > /run/coreos/motd
+	echo -e "Core\033[38;5;206mO\033[38;5;45mS\033[39m ${GROUP} (${VERSION})" > /run/coreos/motd
 fi
 
 if ! systemctl is-active locksmithd > /dev/null; then
