@@ -3,7 +3,7 @@ BOX_NAME := CoreOS Box
 
 VERSION_ID := 1.6.0
 BUILD_ID   := `date -u '+%Y-%m-%d-%H%M'`
-CHANNEL    := stable
+CHANNEL    := alpha
 
 PWD := `pwd`
 
